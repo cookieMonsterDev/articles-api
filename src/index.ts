@@ -1,7 +1,7 @@
 import express from 'express';
 import dataBase from './dataBase';
 import config from './config';
-import authRouter from './routs/authRouts';
+import userRouter from './routs/userRouts';
 import errorHandler from './core/middleware/errorHandler/errorHandler';
 
 const app = express();
@@ -14,6 +14,6 @@ app.listen(3000, () => {
   console.log('Server started');
 });
 
-app.use(authRouter);
+app.use(userRouter);
 
 app.use(errorHandler);

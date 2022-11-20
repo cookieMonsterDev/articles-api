@@ -3,7 +3,7 @@ import { UserTypes } from '../types/userTypes';
 import HttpErrors from '../../middleware/errorHandler/httpErrors';
 import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
 
-export const createUserSevice = async (body: UserTypes) => {
+export const createUserService = async (body: UserTypes) => {
   try {
     const newUser = new userModel({ ...body });
 
