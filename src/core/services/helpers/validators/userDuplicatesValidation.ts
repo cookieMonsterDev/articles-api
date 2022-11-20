@@ -1,5 +1,5 @@
-import HttpErrors from '../../middleware/httpErrors';
-import { userModel } from '../../models/userModel';
+import HttpErrors from '../../../middleware/errorHandler/httpErrors';
+import { userModel } from '../../../models/userModel';
 
 export const userDuplicatesValidation = async (username: string, email: string) => {
   try {

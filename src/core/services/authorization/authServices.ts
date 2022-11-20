@@ -1,8 +1,8 @@
 import { userModel } from '../../models/userModel';
-import { userValidation } from '../helpers/userValidation';
+import { userValidation } from '../helpers/validators/userValidation';
 import { UserTypes } from '../types/userTypes';
-import HttpErrors from '../../middleware/httpErrors';
-import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
+import HttpErrors from '../../middleware/errorHandler/httpErrors';
+import { userDuplicatesValidation } from '../helpers/validators/userDuplicatesValidation';
 
 export const createUserSevice = async (body: UserTypes) => {
   try {
