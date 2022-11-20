@@ -1,5 +1,5 @@
-import HttpErrors from '../../../middleware/errorHandler/httpErrors';
-import { userModel } from '../../../models/userModel';
+import HttpErrors from '../../middleware/errorHandler/httpErrors';
+import { userModel } from '../../models/userModel';
 
 export const userDuplicatesValidation = async (username: string, email: string) => {
   try {
@@ -11,6 +11,6 @@ export const userDuplicatesValidation = async (username: string, email: string) 
 
     return;
   } catch (error) {
-    throw new HttpErrors(409, `Validation for duplicates failed: ${error.message}`);
+    throw new HttpErrors(409, `Duplicates validation failed: ${error.message}`);
   }
 };
