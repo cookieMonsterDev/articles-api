@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
+import { UserTypes } from '../services/types/userTypes';
 
 const NO_SPACES = /^\S*$/;
 const EMAIL_REGEX =
@@ -92,5 +94,35 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre('save', async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  }
+  catch (error) {
+    next(error)
+  }
+})
+
+userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
+  try {
+    const update = this.getUpdate() as UserTypes;
+
+    if(update.hasOwnProperty('password')) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(update.password, salt);
+      this.setUpdate({ $set: { password: hashedPassword } })
+      next()
+    }
+ 
+    next();
+  }
+  catch (error) {
+    next(error)
+  }
+})
 
 export const userModel = model('User', userSchema);
