@@ -103,7 +103,7 @@ userSchema.pre('save', async function (next) {
     this.password = hashedPassword;
     next();
   } catch (error) {
-    throw new HttpErrors(404, `User validation failed: ${error.message}`);
+    throw new HttpErrors(401, `User validation failed: ${error.message}`);
   }
 });
 
@@ -127,7 +127,7 @@ userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
 
     next();
   } catch (error) {
-    throw new HttpErrors(404, `User validation failed: ${error.message}`);
+    throw new HttpErrors(401, `User validation failed: ${error.message}`);
   }
 });
 

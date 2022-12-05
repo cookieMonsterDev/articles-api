@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { createUserService } from '../services/authorization/authServices';
+import { createUserService, loginUserServise } from '../services/user/authServices';
 
 export const createUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
@@ -8,3 +8,10 @@ export const createUserControl = expressAsyncHandler(
     res.status(201).json(user);
   }
 );
+
+export const loginUserControl = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const user = await loginUserServise(req.body);
+    res.status(201).json(user);
+  }
+)

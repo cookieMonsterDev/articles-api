@@ -13,6 +13,17 @@ export const getUserService = async (id: string): Promise<UserTypes> => {
   }
 };
 
+export const getAllUsersService = async (): Promise<UserTypes[]> => {
+  try {
+    const res = await userModel.find();
+
+    return [...res];
+  } catch (error) {
+    // to do
+    throw new HttpErrors(404, 'User not found', error.message, error.stack);
+  }
+};
+
 export const updateUserService = async (
   id: string,
   body: UserTypes
@@ -48,4 +59,4 @@ export const deleteUserService = async (id: string): Promise<void> => {
       error.stack
     );
   }
-}
+};
