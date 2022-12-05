@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { UserTypes } from '../services/types/userTypes';
+import HttpErrors from '../middleware/errorHandler/httpErrors';
 
 const NO_SPACES = /^\S*$/;
 const EMAIL_REGEX =
@@ -101,28 +102,33 @@ userSchema.pre('save', async function (next) {
     const hashedPassword = await bcrypt.hash(this.password, salt);
     this.password = hashedPassword;
     next();
+  } catch (error) {
+    next(error);
   }
-  catch (error) {
-    next(error)
-  }
-})
+});
 
 userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
   try {
-    const update = this.getUpdate() as UserTypes;
+    const { password: newPassword, ...rest } = this.getUpdate() as UserTypes;
+    if (!newPassword) next();
 
-    if(update.hasOwnProperty('password')) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(update.password, salt);
-      this.setUpdate({ $set: { password: hashedPassword } })
-      next()
-    }
- 
+    const salt = await bcrypt.genSalt(10);
+    const { _id } = this.getQuery();
+    const { password: currentPassword, ...other } = (await userModel.findById(
+      _id
+    )) as UserTypes;
+    const match = await bcrypt.compare(newPassword, currentPassword);
+
+    if (match)
+      throw new Error('password: password must be different from previous password');
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+    this.setUpdate({ password: hashedNewPassword });
+
     next();
+  } catch (error) {
+    throw new HttpErrors(404, `User validation failed: ${error.message}`);
   }
-  catch (error) {
-    next(error)
-  }
-})
+});
 
 export const userModel = model('User', userSchema);
