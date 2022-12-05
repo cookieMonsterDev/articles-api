@@ -103,7 +103,7 @@ userSchema.pre('save', async function (next) {
     this.password = hashedPassword;
     next();
   } catch (error) {
-    next(error);
+    throw new HttpErrors(404, `User validation failed: ${error.message}`);
   }
 });
 
