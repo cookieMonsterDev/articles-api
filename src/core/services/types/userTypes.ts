@@ -1,4 +1,4 @@
-export interface UserTypes {
+export interface InputUserTypes {
   username: string;
   email: string;
   password: string;
@@ -13,4 +13,15 @@ export interface UserTypes {
 export interface LoginUsertypes {
   email: string;
   password: string;
+}
+
+export interface OutputUserTypes {
+  id: string,
+  username: string,
+  email: string,
+  name: string;
+  surname: string;
+  pictureURL: string;
+  bio: string;
+  token?: string;
 }

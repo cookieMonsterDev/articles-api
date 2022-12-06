@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserTypes } from '../services/types/userTypes';
+import { InputUserTypes } from '../services/types/userTypes';
 import HttpErrors from '../middleware/errorHandler/httpErrors';
 
 const NO_SPACES = /^\S*$/;
@@ -109,25 +109,27 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
   try {
-    const { password: newPassword, ...rest } = this.getUpdate() as UserTypes;
+    const { password: newPassword, ...rest } = this.getUpdate() as InputUserTypes;
     if (!newPassword) next();
 
     const salt = await bcrypt.genSalt(10);
     const { _id } = this.getQuery();
-    const { password: currentPassword, ...other } = (await userModel.findById(
-      _id
-    )) as UserTypes;
-    const match = await bcrypt.compare(newPassword, currentPassword);
+    const res = (await userModel.findById(_id)) as InputUserTypes;
+    if (!res) throw new Error('User not found');
+
+    const match = await bcrypt.compare(newPassword, res.password);
 
     if (match)
-      throw new Error('password: password must be different from previous password');
+      throw new Error(
+        'User validation failed: password: password must be different from previous password'
+      );
 
     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
     this.setUpdate({ password: hashedNewPassword });
 
     next();
   } catch (error) {
-    throw new HttpErrors(401, `User validation failed: ${error.message}`);
+    throw new HttpErrors(401, error.message);
   }
 });
 

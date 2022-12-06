@@ -26,7 +26,7 @@ export const updateUserControl = expressAsyncHandler(
 
 export const deleteUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    await deleteUserService(req.params.id);
-    res.status(200).json({ message: `user ${req.params.id} is deleted` });
+    const userId = await deleteUserService(req.params.id);
+    res.status(200).json({ message: `user ${userId} is deleted` });
   }
 );

@@ -1,60 +1,121 @@
+import { isValidObjectId } from 'mongoose';
 import { userModel } from '../../models/userModel';
-import { UserTypes } from '../types/userTypes';
+import { InputUserTypes, OutputUserTypes } from '../types/userTypes';
 import HttpErrors from '../../middleware/errorHandler/httpErrors';
 import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
 
-export const getUserService = async (id: string): Promise<UserTypes> => {
+/**
+ * Validate userId and return user
+ * @param { string } id the data received from params of POST request
+ * @returns { OutputUserTypes }
+ */
+export const getUserService = async (id: string): Promise<OutputUserTypes> => {
   try {
-    const res = await userModel.findById(id);
+    const objectId = isValidObjectId(id);
+    if (!objectId) throw new Error('Id validation failed: incorrect objectId');
 
-    return res!;
+    const res = await userModel.findById(id);
+    if (!res) throw new Error('User not found');
+
+    return {
+      id: res._id.toString(),
+      username: res.username,
+      email: res.email,
+      name: res.name,
+      surname: res.surname,
+      pictureURL: res.picture_url,
+      bio: res.bio,
+    };
   } catch (error) {
-    throw new HttpErrors(404, 'User not found', error.message, error.stack);
+    throw new HttpErrors(404, 'Failed to find user', error.message, error.stack);
   }
 };
 
-export const getAllUsersService = async (): Promise<UserTypes[]> => {
+/**
+ * Return all users
+ * @returns { OutputUserTypes[] }
+ */
+export const getAllUsersService = async (): Promise<OutputUserTypes[]> => {
   try {
     const res = await userModel.find();
 
-    return [...res];
+    const resUsers = res.map((item) => {
+      return {
+        id: item._id.toString(),
+        username: item.username,
+        email: item.email,
+        name: item.name,
+        surname: item.surname,
+        pictureURL: item.picture_url,
+        bio: item.bio,
+      };
+    });
+
+    return resUsers;
   } catch (error) {
-    // to do
-    throw new HttpErrors(404, 'User not found', error.message, error.stack);
+    throw new HttpErrors(404, 'Failed to find users', error.message, error.stack);
   }
 };
 
+/**
+ * Validate data and return user
+ * @param { string } id the data received from params of POST request
+ * @param { InputUserTypes } body the data received from body of POST request
+ * @returns { OutputUserTypes }
+ */
 export const updateUserService = async (
   id: string,
-  body: UserTypes
-): Promise<UserTypes> => {
+  body: InputUserTypes
+): Promise<OutputUserTypes> => {
   try {
     const updatedUser = new userModel({ ...body });
-
     await updatedUser.validate([...Array.from(Object.keys(body))]);
     await userDuplicatesValidation(body.username, body.email);
-    const res = await userModel.findByIdAndUpdate(id, { ...body }, { new: true });
 
-    return res!;
+    const objectId = isValidObjectId(id);
+    if (!objectId) throw new Error('Id validation failed: incorrect objectId');
+
+    const res = await userModel.findByIdAndUpdate(id, { ...body }, { new: true });
+    if (!res) throw new Error('User not found');
+
+    return {
+      id: res._id.toString(),
+      username: res.username,
+      email: res.email,
+      name: res.name,
+      surname: res.surname,
+      pictureURL: res.picture_url,
+      bio: res.bio,
+      token: '',
+    };
   } catch (error) {
     throw new HttpErrors(
       error.status || 401,
-      'User not updated',
+      'Failed to update user',
       error.message,
       error.stack
     );
   }
 };
 
-export const deleteUserService = async (id: string): Promise<void> => {
+/**
+ * Validate userId and return userId
+ * @param { string } id the data received from params of POST request
+ * @returns { string } the id of deleted user
+ */
+export const deleteUserService = async (id: string): Promise<string> => {
   try {
-    await userModel.findByIdAndDelete(id);
+    const objectId = isValidObjectId(id);
+    if (!objectId) throw new Error('Id validation failed: incorrect objectId');
 
-    return;
+    const res = await userModel.findByIdAndDelete(id);
+    if (!res) throw new Error('User not found');
+
+    return res._id.toString();
   } catch (error) {
     throw new HttpErrors(
       error.status || 404,
-      'User not found',
+      'Failed to delete user',
       error.message,
       error.stack
     );
