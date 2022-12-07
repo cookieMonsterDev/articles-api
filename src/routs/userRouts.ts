@@ -1,25 +1,23 @@
 import { Router } from 'express';
-import { createUserControl, loginUserControl } from '../core/controls/authControls';
+import { createUserControl, loginUserControl } from '../controls/authControls';
 import {
   deleteUserControl,
   getAllUsersControl,
   getUserControl,
   updateUserControl,
-} from '../core/controls/userControls';
+} from '../controls/userControls';
+import { isAuthorized } from '../middleware/authMiddleware';
 
 const userRouter = Router();
 
 userRouter
   .route('/users/:id')
   .get(getUserControl)
-  .put(updateUserControl)
-  .delete(deleteUserControl);
+  .put(isAuthorized, updateUserControl)
+  .delete(isAuthorized, deleteUserControl);
 
-userRouter.route('/users')
-  .get(getAllUsersControl)
-  .post(createUserControl);
+userRouter.route('/users').get(getAllUsersControl).post(createUserControl);
 
-userRouter.route('/users/login')
-  .post(loginUserControl);
+userRouter.route('/users/login').post(loginUserControl);
 
 export default userRouter;

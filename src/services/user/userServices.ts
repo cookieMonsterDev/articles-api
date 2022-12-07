@@ -1,7 +1,7 @@
 import { isValidObjectId } from 'mongoose';
 import { userModel } from '../../models/userModel';
 import { InputUserTypes, OutputUserTypes } from '../types/userTypes';
-import HttpErrors from '../../middleware/errorHandler/httpErrors';
+import HttpErrors from '../../middleware/httpErrors';
 import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
 
 /**

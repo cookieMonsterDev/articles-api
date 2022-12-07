@@ -12,10 +12,12 @@ export const getUserControl = expressAsyncHandler(async (req: Request, res: Resp
   res.status(200).json(user);
 });
 
-export const getAllUsersControl = expressAsyncHandler(async (req: Request, res: Response) => {
-  const user = await getAllUsersService();
-  res.status(200).json(user);
-});
+export const getAllUsersControl = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const user = await getAllUsersService();
+    res.status(200).json(user);
+  }
+);
 
 export const updateUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {

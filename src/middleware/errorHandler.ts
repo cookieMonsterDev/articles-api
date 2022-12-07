@@ -15,7 +15,7 @@ const errorHandler = (
   res.status(status).json({
     status: status,
     messsage: messsage,
-    error: reason,
+    reason: reason,
     stack: stack,
   });
 };

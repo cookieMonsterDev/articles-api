@@ -2,7 +2,7 @@ import express from 'express';
 import dataBase from './dataBase';
 import config from './config';
 import userRouter from './routs/userRouts';
-import errorHandler from './core/middleware/errorHandler/errorHandler';
+import errorHandler from './middleware/errorHandler';
 
 const app = express();
 

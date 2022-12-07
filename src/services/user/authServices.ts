@@ -1,13 +1,14 @@
 import { userModel } from '../../models/userModel';
 import bcrypt from 'bcrypt';
 import { LoginUsertypes, OutputUserTypes, InputUserTypes } from '../types/userTypes';
-import HttpErrors from '../../middleware/errorHandler/httpErrors';
+import HttpErrors from '../../middleware/httpErrors';
 import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
+import { generateToken } from '../../middleware/authMiddleware';
 
 /**
- * Validate data and create new user 
+ * Validate data and create new user
  * @param { InputUserTypes } body the data received from body of POST request
- * @returns { OutputUserTypes } 
+ * @returns { OutputUserTypes }
  */
 export const createUserService = async (
   body: InputUserTypes
@@ -43,7 +44,7 @@ export const createUserService = async (
  * Validate data and return user
  * @param { string } email the data received from body of POST request
  * @param { string } password the data received from body of POST request
- * @returns { OutputUserTypes } 
+ * @returns { OutputUserTypes }
  */
 export const loginUserServise = async ({
   email,
@@ -67,7 +68,13 @@ export const loginUserServise = async ({
       surname: res.surname,
       pictureURL: res.picture_url,
       bio: res.bio,
-      token: '',
+      token: generateToken({
+        id: res._id.toString(),
+        username: res.username,
+        email: res.email,
+        password: res.password,
+        isAdmin: res.isAdmin,
+      }),
     };
   } catch (error) {
     throw new HttpErrors(

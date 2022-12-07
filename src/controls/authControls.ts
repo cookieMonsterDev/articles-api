@@ -14,4 +14,4 @@ export const loginUserControl = expressAsyncHandler(
     const user = await loginUserServise(req.body);
     res.status(201).json(user);
   }
-)
+);

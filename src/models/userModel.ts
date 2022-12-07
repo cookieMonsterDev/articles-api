@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { InputUserTypes } from '../services/types/userTypes';
-import HttpErrors from '../middleware/errorHandler/httpErrors';
+import HttpErrors from '../middleware/httpErrors';
 
 const NO_SPACES = /^\S*$/;
 const EMAIL_REGEX =
@@ -88,10 +88,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    isSuperAdmin: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 );
@@ -129,7 +125,7 @@ userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
 
     next();
   } catch (error) {
-    throw new HttpErrors(401, error.message);
+    throw new HttpErrors(401, error.message, '', error.stack);
   }
 });
 
