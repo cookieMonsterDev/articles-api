@@ -3,7 +3,9 @@ declare namespace Express {
     user: {
       id: string;
       username: string;
+      email: string;
       password: string;
+      pictureURL: string;
       isAdmin: boolean;
     };
   }

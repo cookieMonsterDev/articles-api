@@ -9,6 +9,7 @@ interface TokenTypes {
   username: string;
   email: string;
   password: string;
+  pictureURL: string;
   isAdmin: boolean;
 }
 

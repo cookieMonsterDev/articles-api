@@ -28,7 +28,14 @@ export const createUserService = async (
       surname: res.surname,
       pictureURL: res.picture_url,
       bio: res.bio,
-      token: '',
+      token: generateToken({
+        id: res._id.toString(),
+        username: res.username,
+        email: res.email,
+        password: res.password,
+        pictureURL: res.picture_url,
+        isAdmin: res.isAdmin,
+      }),
     };
   } catch (error) {
     throw new HttpErrors(
@@ -73,6 +80,7 @@ export const loginUserServise = async ({
         username: res.username,
         email: res.email,
         password: res.password,
+        pictureURL: res.picture_url,
         isAdmin: res.isAdmin,
       }),
     };
