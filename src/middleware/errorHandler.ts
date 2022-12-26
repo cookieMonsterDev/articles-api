@@ -10,13 +10,11 @@ const errorHandler = (
   const status = err.status || 500;
   const messsage = err.message || 'Something went wrong';
   const reason = err.reason?.replace(`Error: `, '') || 'unknown';
-  const stack = err.stack?.replace(`Error: `, '');
 
   res.status(status).json({
     status: status,
     messsage: messsage,
-    reason: reason,
-    stack: stack,
+    reason: reason
   });
 };
 

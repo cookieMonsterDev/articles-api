@@ -41,8 +41,7 @@ export const createUserService = async (
     throw new HttpErrors(
       error.status || 401,
       `Failed to create user`,
-      error.message,
-      error.stack
+      error.message
     );
   }
 };
@@ -88,8 +87,7 @@ export const loginUserServise = async ({
     throw new HttpErrors(
       error.status || 401,
       `Failed to login user`,
-      error.message,
-      error.stack
+      error.message
     );
   }
 };

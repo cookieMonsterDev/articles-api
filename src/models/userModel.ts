@@ -125,7 +125,7 @@ userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
 
     next();
   } catch (error) {
-    throw new HttpErrors(401, error.message, '', error.stack);
+    throw new HttpErrors(401, error.message, '');
   }
 });
 

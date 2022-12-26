@@ -2,10 +2,6 @@ import { Schema, model } from 'mongoose';
 
 const commentSchema = new Schema(
   {
-    article_id: {
-      type: String,
-      required: [true, 'articleId is required'],
-    },
     user_id: {
       type: String,
       required: [true, 'userId is required'],
@@ -29,4 +25,4 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-export const articleModle = model('Comment', commentSchema);
+export const commentModle = model('Comment', commentSchema);

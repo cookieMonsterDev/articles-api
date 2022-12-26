@@ -25,3 +25,12 @@ export interface OutputUserTypes {
   bio: string;
   token?: string;
 }
+
+export interface UserFromTokenTypes {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  pictureURL: string;
+  isAdmin: boolean;
+}

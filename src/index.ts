@@ -3,6 +3,7 @@ import dataBase from './dataBase';
 import config from './config';
 import userRouter from './routs/userRouts';
 import errorHandler from './middleware/errorHandler';
+import articleRouter from './routs/articleRouts';
 
 const app = express();
 
@@ -14,6 +15,6 @@ app.listen(3000, () => {
   console.log('Server started');
 });
 
-app.use(userRouter);
+app.use(userRouter, articleRouter);
 
 app.use(errorHandler);

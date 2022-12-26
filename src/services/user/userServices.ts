@@ -27,7 +27,7 @@ export const getUserService = async (id: string): Promise<OutputUserTypes> => {
       bio: res.bio,
     };
   } catch (error) {
-    throw new HttpErrors(404, 'Failed to find user', error.message, error.stack);
+    throw new HttpErrors(404, 'Failed to find user', error.message);
   }
 };
 
@@ -53,7 +53,7 @@ export const getAllUsersService = async (): Promise<OutputUserTypes[]> => {
 
     return resUsers;
   } catch (error) {
-    throw new HttpErrors(404, 'Failed to find users', error.message, error.stack);
+    throw new HttpErrors(404, 'Failed to find users', error.message);
   }
 };
 
@@ -92,8 +92,7 @@ export const updateUserService = async (
     throw new HttpErrors(
       error.status || 401,
       'Failed to update user',
-      error.message,
-      error.stack
+      error.message
     );
   }
 };
@@ -116,8 +115,7 @@ export const deleteUserService = async (id: string): Promise<string> => {
     throw new HttpErrors(
       error.status || 404,
       'Failed to delete user',
-      error.message,
-      error.stack
+      error.message
     );
   }
 };

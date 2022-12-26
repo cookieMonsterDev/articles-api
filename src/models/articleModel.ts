@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { commentModle } from './commentModel';
 
 const articleSchema = new Schema(
   {
@@ -29,6 +30,7 @@ const articleSchema = new Schema(
     },
     article_content: {
       type: String,
+      required: [true, 'article content is required'],
       maxLength: [10000, 'article content must have less than 10000 characters'],
       default: '',
       trim: true,
@@ -36,7 +38,11 @@ const articleSchema = new Schema(
     tags: {
       type: [String],
       default: [],
-    }
+    },
+    comments: {
+      type: [],
+      default: [],
+    },
   },
   { timestamps: true }
 );

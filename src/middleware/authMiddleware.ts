@@ -32,7 +32,7 @@ export const verifyToken = async (req: Request, res: Response): Promise<void> =>
     req.user = decodedToken;
     return;
   } catch (error) {
-    throw new HttpErrors(401, error.message, error.reason, error.stack);
+    throw new HttpErrors(401, error.message, error.reason);
   }
 };
 
@@ -49,8 +49,7 @@ export const isAuthorized = expressAsyncHandler(
       throw new HttpErrors(
         error.status || 401,
         'Authorization failed',
-        error.message,
-        error.stack
+        error.message
       );
     }
   }
@@ -65,7 +64,7 @@ export const isAuthorizedAndAdmin = expressAsyncHandler(
 
       next();
     } catch (error) {
-      throw new HttpErrors(401, 'Authorization failed', error.message, error.stack);
+      throw new HttpErrors(401, 'Authorization failed', error.message);
     }
   }
 );
