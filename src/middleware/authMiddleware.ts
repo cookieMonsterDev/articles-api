@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
-import config from '../config';
 import HttpErrors from './httpErrors';
 
 interface TokenTypes {
@@ -14,7 +13,7 @@ interface TokenTypes {
 }
 
 export const generateToken = (tokenData: TokenTypes): string => {
-  return jwt.sign(tokenData, config.someSecret, { expiresIn: '1h' });
+  return jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1h' });
 };
 
 export const verifyToken = async (req: Request, res: Response): Promise<void> => {
@@ -27,7 +26,7 @@ export const verifyToken = async (req: Request, res: Response): Promise<void> =>
       throw new Error('Token not provided');
 
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, config.someSecret) as TokenTypes;
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY) as TokenTypes;
 
     req.user = decodedToken;
     return;

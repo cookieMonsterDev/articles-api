@@ -1,13 +1,15 @@
 import express from 'express';
 import dataBase from './dataBase';
-import config from './config';
 import userRouter from './routs/userRouts';
 import errorHandler from './middleware/errorHandler';
 import articleRouter from './routs/articleRouts';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
-dataBase(config.dataBaseURL);
+dataBase(process.env.DATA_BASE_URL);
 
 app.use(express.json());
 
