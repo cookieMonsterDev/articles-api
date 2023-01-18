@@ -25,4 +25,4 @@ const commentSchema = new Schema(
   { timestamps: true }
 );
 
-export const commentModle = model('Comment', commentSchema);
+export const commentModel = model('Comment', commentSchema);

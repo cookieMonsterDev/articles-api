@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { commentModle } from './commentModel';
 
 const articleSchema = new Schema(
   {
@@ -39,10 +38,7 @@ const articleSchema = new Schema(
       type: [String],
       default: [],
     },
-    comments: {
-      type: [],
-      default: [],
-    },
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   },
   { timestamps: true }
 );
