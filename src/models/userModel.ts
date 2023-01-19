@@ -15,6 +15,8 @@ const AT_LEAST_ONE_SPECIAL_CHARACTER = /(?=.*?[#?!@$%^_&*-])/;
 
 const userSchema = new Schema(
   {
+    articles: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
     username: {
       type: String,
       required: [true, 'username is required'],

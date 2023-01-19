@@ -7,12 +7,10 @@ import { UserFromTokenTypes } from '../types/userTypes';
 export const createArticleService = async (
   user: UserFromTokenTypes,
   body: InputArticleTypes
-): Promise<OutputArticleTypes> => {
+): Promise<any> => {
   try {
     const newArticle = new articleModle({
-      user_id: user.id,
-      author: user.username,
-      author_picture: user.pictureURL,
+      author: user.id,
       ...body,
     });
 
@@ -21,19 +19,7 @@ export const createArticleService = async (
     const res = await newArticle.save();
     if(!res) throw new HttpErrors(404, 'Failed to create article', 'Something went wrong');
 
-    return {
-      id: res._id.toString(),
-      user_id: res.user_id,
-      author: res.author,
-      author_picture: res.author_picture!,
-      title: res.title,
-      description: res.description,
-      article_content: res.article_content,
-      tags: res.tags,
-      comments: res.comments,
-      createdAt: res.createdAt,
-      updatedAt: res.updatedAt,
-    };
+    return res;
   } catch (error) {
     throw new HttpErrors(
       error.status || 401,
@@ -43,61 +29,64 @@ export const createArticleService = async (
   }
 };
 
-export const getArticleService = async (id: string): Promise<OutputArticleTypes> => {
+export const getArticleService = async (id: string): Promise<any> => {
   try {
     const objectId = isValidObjectId(id);
     if (!objectId) throw new Error('Id validation failed: incorrect objectId');
 
-    const res = await articleModle.findById(id);
+    const res = await articleModle.findById(id).populate('comments');
     if (!res) throw new HttpErrors(404, 'Failed to find article', 'Article not found');
 
-    return {
-      id: res._id.toString(),
-      user_id: res.user_id,
-      author: res.author,
-      author_picture: res.author_picture!,
-      title: res.title,
-      description: res.description,
-      article_content: res.article_content,
-      tags: res.tags,
-      comments: res.comments,
-      createdAt: res.createdAt,
-      updatedAt: res.updatedAt,
-    };
+    // return {
+    //   id: res._id.toString(),
+    //   user_id: res.user_id,
+    //   author: res.author,
+    //   author_picture: res.author_picture!,
+    //   title: res.title,
+    //   description: res.description,
+    //   article_content: res.article_content,
+    //   tags: res.tags,
+    //   comments: res.comments,
+    //   createdAt: res.createdAt,
+    //   updatedAt: res.updatedAt,
+    // };
+    return res
   } catch (error) {
     throw new HttpErrors(404, 'Failed to find article', error.message);
   }
 };
 
-export const getAllArticleService = async (): Promise<OutputArticleTypes[]> => {
+export const getAllArticleService = async (): Promise<any> => {
   try {
     const res = await articleModle.find();
     if (!res) throw new HttpErrors(404, 'Failed to find articles', 'There are no articles yet!');
 
-    const modRes = res.map((i) => {
-      return {
-        id: i._id.toString(),
-        user_id: i.user_id,
-        author: i.author,
-        author_picture: i.author_picture!,
-        title: i.title,
-        description: i.description,
-        article_content: i.article_content,
-        tags: i.tags,
-        comments: i.comments,
-        createdAt: i.createdAt,
-        updatedAt: i.updatedAt,
-      };
-    });
+    // const modRes = res.map((i) => {
+    //   return {
+    //     id: i._id.toString(),
+    //     user_id: i.user_id,
+    //     author: i.author,
+    //     author_picture: i.author_picture!,
+    //     title: i.title,
+    //     description: i.description,
+    //     article_content: i.article_content,
+    //     tags: i.tags,
+    //     comments: i.comments,
+    //     createdAt: i.createdAt,
+    //     updatedAt: i.updatedAt,
+    //   };
+    // });
 
-    return modRes;
+    // return modRes;
+
+    return {}
   } catch (error) {
     throw new HttpErrors(404, 'Failed to find article', error.message);
   }
 };
 
 export const updateArticleService = async (id: string,
-  user: UserFromTokenTypes, body: InputArticleTypes): Promise<OutputArticleTypes> => {
+  user: UserFromTokenTypes, body: InputArticleTypes): Promise<any> => {
     try {
       const objectId = isValidObjectId(id);
       if (!objectId) throw new Error('Id validation failed: incorrect objectId');
@@ -105,8 +94,8 @@ export const updateArticleService = async (id: string,
       const access = await articleModle.findById(id);
       if (!access) throw new HttpErrors(404, 'Failed to update article', 'Article not found');
 
-      if (access.user_id !== user.id && !user.isAdmin)
-      throw new HttpErrors(401, 'Authorization failed', 'Access denied');
+      // if (access.user_id !== user.id && !user.isAdmin)
+      // throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
       const updatedArticle = new articleModle({ ...body });
       await updatedArticle.validate([...Array.from(Object.keys(body))]);
@@ -114,19 +103,20 @@ export const updateArticleService = async (id: string,
       const res = await articleModle.findByIdAndUpdate(id, { ...body }, { new: true });
       if (!res) throw new HttpErrors(404, 'Failed to update article', 'Article not found');
 
-      return {
-        id: res._id.toString(),
-        user_id: res.user_id,
-        author: res.author,
-        author_picture: res.author_picture!,
-        title: res.title,
-        description: res.description,
-        article_content: res.article_content,
-        tags: res.tags,
-        comments: res.comments,
-        createdAt: res.createdAt,
-        updatedAt: res.updatedAt,
-      };
+      // return {
+      //   id: res._id.toString(),
+      //   user_id: res.user_id,
+      //   author: res.author,
+      //   author_picture: res.author_picture!,
+      //   title: res.title,
+      //   description: res.description,
+      //   article_content: res.article_content,
+      //   tags: res.tags,
+      //   comments: res.comments,
+      //   createdAt: res.createdAt,
+      //   updatedAt: res.updatedAt,
+      // };
+      return {}
     }
     catch(error) {
       throw new HttpErrors(
@@ -140,7 +130,7 @@ export const updateArticleService = async (id: string,
 export const deleteArticleService = async (
   id: string,
   user: UserFromTokenTypes
-): Promise<string> => {
+): Promise<any> => {
   try {
     const objectId = isValidObjectId(id);
     if (!objectId) throw new Error('Id validation failed: incorrect objectId');
@@ -148,8 +138,8 @@ export const deleteArticleService = async (
     const access = await articleModle.findById(id);
     if (!access) throw new HttpErrors(404, 'Failed to delete article', 'Article not found');
  
-    if (access.user_id !== user.id && !user.isAdmin)
-      throw new HttpErrors(401, 'Authorization failed', 'Access denied');
+    // if (access.user_id !== user.id && !user.isAdmin)
+    //   throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
     const res = await articleModle.findByIdAndDelete(id);
     if (!res) throw new Error('Article not found');

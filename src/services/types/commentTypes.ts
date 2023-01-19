@@ -1,5 +1,6 @@
 export interface CommentTypes {
   user_id: string;
+  article_id: string;
   author: string;
   author_picture: string;
   comment_content: string;
@@ -11,6 +12,7 @@ export interface InputCommentTypes {
 
 export interface OutputCommentTypes {
   user_id: string;
+  article_id: string;
   author: string;
   author_picture: string;
   comment_content: string;

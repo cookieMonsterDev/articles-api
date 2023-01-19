@@ -2,19 +2,8 @@ import { Schema, model } from 'mongoose';
 
 const articleSchema = new Schema(
   {
-    user_id: {
-      type: String,
-      required: [true, 'userId is required'],
-    },
-    author: {
-      type: String,
-      required: [true, 'author is required'],
-    },
-    author_picture: {
-      type: String,
-      default: '',
-      trim: true,
-    },
+    author: {type: Schema.Types.ObjectId, ref: 'User'},
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
     title: {
       type: String,
       required: [true, 'author is required'],
@@ -27,7 +16,7 @@ const articleSchema = new Schema(
       default: '',
       trim: true,
     },
-    article_content: {
+    text: {
       type: String,
       required: [true, 'article content is required'],
       maxLength: [10000, 'article content must have less than 10000 characters'],
@@ -37,8 +26,7 @@ const articleSchema = new Schema(
     tags: {
       type: [String],
       default: [],
-    },
-    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    }
   },
   { timestamps: true }
 );
