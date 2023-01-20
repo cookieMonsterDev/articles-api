@@ -1,8 +1,8 @@
 import { isValidObjectId } from 'mongoose';
-import { userModel } from '../../models/userModel';
-import { InputUserTypes, OutputUserTypes } from '../types/userTypes';
-import HttpErrors from '../../middleware/httpErrors';
-import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
+import { userModel } from '../models/userModel';
+import { InputUserTypes, OutputUserTypes } from './types/userTypes';
+import HttpErrors from '../middleware/httpErrors';
+import { userDuplicatesValidation } from './helpers/userDuplicatesValidation';
 
 /**
  * Validate userId and return user
@@ -18,7 +18,7 @@ export const getUserService = async (id: string): Promise<OutputUserTypes> => {
     if (!res) throw new Error('User not found');
 
     return {
-      id: res._id.toString(),
+      _id: res._id.toString(),
       username: res.username,
       email: res.email,
       name: res.name,
@@ -41,7 +41,7 @@ export const getAllUsersService = async (): Promise<OutputUserTypes[]> => {
 
     const resUsers = res.map((item) => {
       return {
-        id: item._id.toString(),
+        _id: item._id.toString(),
         username: item.username,
         email: item.email,
         name: item.name,
@@ -79,7 +79,7 @@ export const updateUserService = async (
     if (!res) throw new Error('User not found');
 
     return {
-      id: res._id.toString(),
+      _id: res._id.toString(),
       username: res.username,
       email: res.email,
       name: res.name,
@@ -89,11 +89,7 @@ export const updateUserService = async (
       token: '',
     };
   } catch (error) {
-    throw new HttpErrors(
-      error.status || 401,
-      'Failed to update user',
-      error.message
-    );
+    throw new HttpErrors(error.status || 401, 'Failed to update user', error.message);
   }
 };
 
@@ -112,10 +108,6 @@ export const deleteUserService = async (id: string): Promise<string> => {
 
     return res._id.toString();
   } catch (error) {
-    throw new HttpErrors(
-      error.status || 404,
-      'Failed to delete user',
-      error.message
-    );
+    throw new HttpErrors(error.status || 404, 'Failed to delete user', error.message);
   }
 };

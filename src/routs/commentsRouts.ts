@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCommntControl } from '../controls/commentsControl';
+import { createCommntControl, getCommntControl } from '../controls/commentsControl';
 import { isAuthorized } from '../middleware/authMiddleware';
 
 const commentsRouter = Router();
@@ -10,5 +10,9 @@ commentsRouter
   // .get(getAllArticleControl)
   // .put(isAuthorized, updateArticleControl)
   // .delete(isAuthorized, deleteArticleControl);
+
+commentsRouter
+  .route('/articles/:articleId/comments/:commentId')
+  .get(isAuthorized, getCommntControl)
 
 export default commentsRouter;

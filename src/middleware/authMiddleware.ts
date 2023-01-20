@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import HttpErrors from './httpErrors';
 
 interface TokenTypes {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   password: string;
@@ -40,7 +40,7 @@ export const isAuthorized = expressAsyncHandler(
     try {
       await verifyToken(req, res);
 
-      if (!(req.user.id !== req.query.id || req.user.isAdmin))
+      if (!(req.user._id !== req.query.id || req.user.isAdmin))
         throw new Error('Access denied');
 
       next();

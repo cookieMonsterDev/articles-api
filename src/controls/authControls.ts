@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { createUserService, loginUserServise } from '../services/user/authServices';
+import { createUserService, loginUserServise } from '../services/authServices';
 
 export const createUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {

@@ -1,9 +1,37 @@
 import { Schema, model } from 'mongoose';
 
-const articleSchema = new Schema(
+export interface ArticleUser {
+  _id: string;
+  username: string;
+  email: string;
+  name: string;
+  surname: string;
+  pictureURL: string;
+}
+
+export interface ArticleComment {
+  _id: string;
+  author: ArticleUser;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Article {
+  _id: string;
+  author: ArticleUser;
+  title: string;
+  description: string;
+  text: string;
+  tags: string[];
+  comments: ArticleComment[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const articleSchema = new Schema<Article>(
   {
     author: {type: Schema.Types.ObjectId, ref: 'User'},
-    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
     title: {
       type: String,
       required: [true, 'author is required'],
@@ -26,7 +54,8 @@ const articleSchema = new Schema(
     tags: {
       type: [String],
       default: [],
-    }
+    },
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   },
   { timestamps: true }
 );

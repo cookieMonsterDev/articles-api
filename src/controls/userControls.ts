@@ -5,7 +5,7 @@ import {
   getAllUsersService,
   updateUserService,
   deleteUserService,
-} from '../services/user/userServices';
+} from '../services/userServices';
 
 export const getUserControl = expressAsyncHandler(async (req: Request, res: Response) => {
   const user = await getUserService(req.params.id);

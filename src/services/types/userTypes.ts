@@ -16,18 +16,18 @@ export interface LoginUsertypes {
 }
 
 export interface OutputUserTypes {
-  id: string,
+  _id: string,
   username: string,
   email: string,
   name: string;
   surname: string;
   pictureURL: string;
-  bio: string;
+  bio?: string;
   token?: string;
 }
 
 export interface UserFromTokenTypes {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   password: string;

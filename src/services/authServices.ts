@@ -1,9 +1,9 @@
-import { userModel } from '../../models/userModel';
+import { userModel } from '../models/userModel';
 import bcrypt from 'bcrypt';
-import { LoginUsertypes, OutputUserTypes, InputUserTypes } from '../types/userTypes';
-import HttpErrors from '../../middleware/httpErrors';
-import { userDuplicatesValidation } from '../helpers/userDuplicatesValidation';
-import { generateToken } from '../../middleware/authMiddleware';
+import { LoginUsertypes, OutputUserTypes, InputUserTypes } from './types/userTypes';
+import HttpErrors from '../middleware/httpErrors';
+import { userDuplicatesValidation } from './helpers/userDuplicatesValidation';
+import { generateToken } from '../middleware/authMiddleware';
 
 /**
  * Validate data and create new user
@@ -21,7 +21,7 @@ export const createUserService = async (
     const res = await newUser.save();
 
     return {
-      id: res._id.toString(),
+      _id: res._id.toString(),
       username: res.username,
       email: res.email,
       name: res.name,
@@ -29,7 +29,7 @@ export const createUserService = async (
       pictureURL: res.picture_url,
       bio: res.bio,
       token: generateToken({
-        id: res._id.toString(),
+        _id: res._id.toString(),
         username: res.username,
         email: res.email,
         password: res.password,
@@ -38,11 +38,7 @@ export const createUserService = async (
       }),
     };
   } catch (error) {
-    throw new HttpErrors(
-      error.status || 401,
-      `Failed to create user`,
-      error.message
-    );
+    throw new HttpErrors(error.status || 401, `Failed to create user`, error.message);
   }
 };
 
@@ -67,7 +63,7 @@ export const loginUserServise = async ({
     if (!match) throw new Error('Wrong email or password');
 
     return {
-      id: res._id.toString(),
+      _id: res._id.toString(),
       username: res.username,
       email: res.email,
       name: res.name,
@@ -75,7 +71,7 @@ export const loginUserServise = async ({
       pictureURL: res.picture_url,
       bio: res.bio,
       token: generateToken({
-        id: res._id.toString(),
+        _id: res._id.toString(),
         username: res.username,
         email: res.email,
         password: res.password,
@@ -84,10 +80,6 @@ export const loginUserServise = async ({
       }),
     };
   } catch (error) {
-    throw new HttpErrors(
-      error.status || 401,
-      `Failed to login user`,
-      error.message
-    );
+    throw new HttpErrors(error.status || 401, `Failed to login user`, error.message);
   }
 };
