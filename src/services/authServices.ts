@@ -32,7 +32,7 @@ export const createUserService = async (body: InputData): Promise<PrivateUser> =
 
     const res = await newUser.save();
 
-    return userDataTransformator({user: res, isPrivate: true});
+    return userDataTransformator({ user: res, isPrivate: true });
   } catch (error) {
     throw new HttpErrors(error.status || 401, `Failed to create user`, error.message);
   }
@@ -58,7 +58,7 @@ export const loginUserServise = async ({
     const match = await bcrypt.compare(password, res.password);
     if (!match) throw new Error('Wrong email or password');
 
-    return userDataTransformator({user: res, isPrivate: true});
+    return userDataTransformator({ user: res, isPrivate: true });
   } catch (error) {
     throw new HttpErrors(error.status || 401, `Failed to login user`, error.message);
   }
