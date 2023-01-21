@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-export interface ArticleUser {
+interface ArticleUser {
   _id: string;
   username: string;
   email: string;
@@ -9,7 +9,7 @@ export interface ArticleUser {
   pictureURL: string;
 }
 
-export interface ArticleComment {
+interface ArticleComment {
   _id: string;
   author: ArticleUser;
   text: string;

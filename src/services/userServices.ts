@@ -1,15 +1,14 @@
 import { isValidObjectId } from 'mongoose';
 import { userModel } from '../models/userModel';
-import { InputUserTypes, OutputUserTypes } from './types/userTypes';
 import HttpErrors from '../middleware/httpErrors';
-import { userDuplicatesValidation } from './helpers/userDuplicatesValidation';
+import { userDuplicatesValidation } from './helpers/userHelpers';
 
 /**
  * Validate userId and return user
  * @param { string } id the data received from params of POST request
  * @returns { OutputUserTypes }
  */
-export const getUserService = async (id: string): Promise<OutputUserTypes> => {
+export const getUserService = async (id: string): Promise<any> => {
   try {
     const objectId = isValidObjectId(id);
     if (!objectId) throw new Error('Id validation failed: incorrect objectId');
@@ -35,7 +34,7 @@ export const getUserService = async (id: string): Promise<OutputUserTypes> => {
  * Return all users
  * @returns { OutputUserTypes[] }
  */
-export const getAllUsersService = async (): Promise<OutputUserTypes[]> => {
+export const getAllUsersService = async (): Promise<any[]> => {
   try {
     const res = await userModel.find();
 
@@ -63,10 +62,7 @@ export const getAllUsersService = async (): Promise<OutputUserTypes[]> => {
  * @param { InputUserTypes } body the data received from body of POST request
  * @returns { OutputUserTypes }
  */
-export const updateUserService = async (
-  id: string,
-  body: InputUserTypes
-): Promise<OutputUserTypes> => {
+export const updateUserService = async (id: string, body: any): Promise<any> => {
   try {
     const updatedUser = new userModel({ ...body });
     await updatedUser.validate([...Array.from(Object.keys(body))]);

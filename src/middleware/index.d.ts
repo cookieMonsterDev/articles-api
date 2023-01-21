@@ -5,7 +5,7 @@ declare namespace Express {
       username: string;
       email: string;
       password: string;
-      pictureURL: string;
+      picture_url: string;
       isAdmin: boolean;
     };
   }

@@ -1,7 +1,19 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { InputUserTypes } from '../services/types/userTypes';
 import HttpErrors from '../middleware/httpErrors';
+
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  name: string;
+  surname: string;
+  picture_url: string;
+  bio: string;
+  isAdmin: boolean;
+  token: boolean;
+}
 
 const NO_SPACES = /^\S*$/;
 const EMAIL_REGEX =
@@ -13,7 +25,7 @@ const AT_LEAST_ONE_LOWER_CASE_LETTER = /(?=.*?[a-z])/;
 const AT_LEAST_ONE_NUMBER = /(?=.*?[0-9])/;
 const AT_LEAST_ONE_SPECIAL_CHARACTER = /(?=.*?[#?!@$%^_&*-])/;
 
-const userSchema = new Schema(
+const userSchema = new Schema<User>(
   {
     username: {
       type: String,
@@ -95,7 +107,7 @@ const userSchema = new Schema(
 userSchema.pre('save', async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
+    const hashedPassword = await bcrypt.hash(this.password!, salt);
     this.password = hashedPassword;
     next();
   } catch (error) {
@@ -105,12 +117,13 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
   try {
-    const { password: newPassword, ...rest } = this.getUpdate() as InputUserTypes;
+
+    const { password: newPassword, ...rest } = this.getUpdate() as User;
     if (!newPassword) next();
 
     const salt = await bcrypt.genSalt(10);
     const { _id } = this.getQuery();
-    const res = (await userModel.findById(_id)) as InputUserTypes;
+    const res = (await userModel.findById(_id)) as User;
     if (!res) throw new Error('User not found');
 
     const match = await bcrypt.compare(newPassword, res.password);

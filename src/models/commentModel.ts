@@ -1,6 +1,24 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, ObjectId } from 'mongoose';
 
-const commentSchema = new Schema(
+interface CommentUser {
+  _id: string;
+  username: string;
+  email: string;
+  name: string;
+  surname: string;
+  pictureURL: string;
+}
+
+export interface Comment {
+  _id: string;
+  article: ObjectId;
+  author: CommentUser;
+  text: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const commentSchema = new Schema<Comment>(
   {
     article: { type: Schema.Types.ObjectId, ref: 'Article' },
     author: { type: Schema.Types.ObjectId, ref: 'User' },

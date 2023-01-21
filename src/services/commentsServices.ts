@@ -2,13 +2,11 @@ import { isValidObjectId } from 'mongoose';
 import HttpErrors from '../middleware/httpErrors';
 import { articleModle } from '../models/articleModel';
 import { commentModel } from '../models/commentModel';
-import { InputCommentTypes, OutputCommentTypes } from './types/commentTypes';
-import { UserFromTokenTypes } from './types/userTypes';
 
 export const createCommentService = async (
-  user: UserFromTokenTypes,
+  user: any,
   articleId: string,
-  body: InputCommentTypes
+  body: any
 ): Promise<any> => {
   console.log(articleId);
 
