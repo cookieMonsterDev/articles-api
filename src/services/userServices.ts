@@ -33,7 +33,7 @@ const publicUserFieldsConfig = [
 
 /**
  * Validate userId and return user
- * @param { string } id the data received from params of POST request
+ * @param { string } id the data received from params of GET request
  * @returns { PublicUser }
  */
 export const getUserService = async (id: string): Promise<PublicUser> => {
@@ -65,7 +65,10 @@ export const getAllUsersService = async (): Promise<PublicUser[]> => {
 };
 
 /**
- * Validate data and return user
+ * Validate authorization and data, update user, returns updated user
+ * @param { string } userId the userId of that recived from request params
+ * @param { TokenTypes } tokenUser the user data that recived from token
+ * @param { InputData } body the data that recived from POST request
  * @returns { PrivateUser }
  */
 export const updateUserService = async ({
@@ -73,7 +76,7 @@ export const updateUserService = async ({
   tokenUser,
   body,
 }: UserUpdateTypes): Promise<PrivateUser> => {
-  if (userId !== tokenUser._id)
+  if (userId !== tokenUser._id && !tokenUser.isAdmin)
     throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
   try {
@@ -94,15 +97,17 @@ export const updateUserService = async ({
 };
 
 /**
- * Validate userId and return userId
- * @param { string } id the data received from params of POST request
+ * Validate authorization, userId, delete user, returns deleted user id
+ * @param { string } userId the userId of that recived from request params
+ * @param { TokenTypes } tokenUser the userId that recived from token
  * @returns { string } the id of deleted user
  */
 export const deleteUserService = async (
   userId: string,
-  tokenUserId: string
+  tokenUser: TokenTypes
 ): Promise<string> => {
-  if (userId !== tokenUserId)
+
+  if (userId !== tokenUser._id && !tokenUser.isAdmin)
     throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
   try {

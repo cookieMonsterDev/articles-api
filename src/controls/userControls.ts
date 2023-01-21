@@ -33,7 +33,7 @@ export const updateUserControl = expressAsyncHandler(
 
 export const deleteUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const userId = await deleteUserService(req.params.userId, req.user._id);
+    const userId = await deleteUserService(req.params.userId, req.user);
     res.status(200).json({ message: `user ${userId} is deleted` });
   }
 );

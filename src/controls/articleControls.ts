@@ -17,7 +17,7 @@ export const createArticleControl = expressAsyncHandler(
 
 export const getArticleControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const article = await getArticleService(req.params.id);
+    const article = await getArticleService(req.params.articleId);
     res.status(201).json(article);
   }
 );
@@ -31,14 +31,18 @@ export const getAllArticleControl = expressAsyncHandler(
 
 export const updateArticleControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const articles = await updateArticleService(req.params.id, req.user, req.body);
+    const articles = await updateArticleService({
+      articleId: req.params.articleId,
+      tokenUser: req.user,
+      body: req.body,
+    });
     res.status(201).json(articles);
   }
 );
 
 export const deleteArticleControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const articleId = await deleteArticleService(req.params.id, req.user);
+    const articleId = await deleteArticleService(req.params.articleId, req.user);
     res.status(200).json({ message: `article ${articleId} is deleted` });
   }
 );

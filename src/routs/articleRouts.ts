@@ -16,7 +16,7 @@ articleRouter
   .get(getAllArticleControl);
 
 articleRouter
-  .route('/articles/:id')
+  .route('/articles/:articleId')
   .get(getArticleControl)
   .put(isAuthorized, updateArticleControl)
   .delete(isAuthorized, deleteArticleControl);
