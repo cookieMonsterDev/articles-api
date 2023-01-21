@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
-import { TokenTypes } from '../middleware/authMiddleware';
 import {
   getUserService,
   getAllUsersService,
