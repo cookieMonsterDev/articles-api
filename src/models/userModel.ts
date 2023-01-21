@@ -2,6 +2,20 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import HttpErrors from '../middleware/httpErrors';
 
+export interface PublicUser {
+  _id: string;
+  username: string;
+  email: string;
+  name: string;
+  surname: string;
+  picture_url: string;
+  bio: string;
+}
+
+export interface PrivateUser extends PublicUser {
+  token: string;
+}
+
 export interface User {
   _id: string;
   username: string;
@@ -134,7 +148,7 @@ userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
       );
 
     const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-    this.setUpdate({ password: hashedNewPassword });
+    this.setUpdate({ password: hashedNewPassword, ...rest});
 
     next();
   } catch (error) {

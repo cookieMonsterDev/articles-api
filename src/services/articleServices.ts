@@ -104,7 +104,7 @@ export const updateArticleService = async (
     if (!access)
       throw new HttpErrors(404, 'Failed to update article', 'Article not found');
 
-    if (access.author._id !== user._id && !user.isAdmin)
+    if (access.author._id !== user._id || !user.isAdmin)
       throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
     const updatedArticle = new articleModle({ ...body });
@@ -139,7 +139,7 @@ export const deleteArticleService = async (
     if (!access)
       throw new HttpErrors(404, 'Failed to delete article', 'Article not found');
 
-    if (access.author._id !== user._id && !user.isAdmin)
+    if (access.author._id !== user._id || !user.isAdmin)
       throw new HttpErrors(401, 'Authorization failed', 'Access denied');
 
     const res = await articleModle.findByIdAndDelete(id);

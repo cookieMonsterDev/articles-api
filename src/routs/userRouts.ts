@@ -11,7 +11,7 @@ import { isAuthorized } from '../middleware/authMiddleware';
 const userRouter = Router();
 
 userRouter
-  .route('/users/:id')
+  .route('/users/:userId')
   .get(getUserControl)
   .put(isAuthorized, updateUserControl)
   .delete(isAuthorized, deleteUserControl);

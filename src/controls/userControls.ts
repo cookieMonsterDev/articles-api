@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
+import { TokenTypes } from '../middleware/authMiddleware';
 import {
   getUserService,
   getAllUsersService,
@@ -21,14 +22,18 @@ export const getAllUsersControl = expressAsyncHandler(
 
 export const updateUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const user = await updateUserService(req.params.id, req.body);
+    const user = await updateUserService({
+      userId: req.params.userId,
+      tokenUser: req.user,
+      body: req.body,
+    });
     res.status(200).json(user);
   }
 );
 
 export const deleteUserControl = expressAsyncHandler(
   async (req: Request, res: Response) => {
-    const userId = await deleteUserService(req.params.id);
+    const userId = await deleteUserService(req.params.userId, req.user._id);
     res.status(200).json({ message: `user ${userId} is deleted` });
   }
 );

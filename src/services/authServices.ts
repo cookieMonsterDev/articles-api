@@ -1,10 +1,7 @@
-import { userModel } from '../models/userModel';
+import { PrivateUser, userModel } from '../models/userModel';
 import bcrypt from 'bcrypt';
 import HttpErrors from '../middleware/httpErrors';
-import {
-  privateUserDataTransform,
-  userDuplicatesValidation,
-} from './helpers/userHelpers';
+import { userDataTransformator, userDuplicatesValidation } from './helpers/userHelpers';
 
 interface InputData {
   username: string;
@@ -22,30 +19,6 @@ interface LoginData {
   password: string;
 }
 
-export interface PrivateUser {
-  _id: string;
-  username: string;
-  email: string;
-  name: string;
-  surname: string;
-  picture_url: string;
-  bio: string;
-  token: string;
-}
-
-////CONSTANTS////////////////////////////////////////////////////////////////////
-const userFieldsConfig = [
-  'username',
-  'email',
-  'password',
-  'name',
-  'surname',
-  'picture_url',
-  'bio',
-  'token',
-];
-/////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Validate data and create new user
  * @param { InputData } body the data received from body of POST request
@@ -59,7 +32,7 @@ export const createUserService = async (body: InputData): Promise<PrivateUser> =
 
     const res = await newUser.save();
 
-    return privateUserDataTransform(res);
+    return userDataTransformator({user: res, isPrivate: true});
   } catch (error) {
     throw new HttpErrors(error.status || 401, `Failed to create user`, error.message);
   }
@@ -71,7 +44,10 @@ export const createUserService = async (body: InputData): Promise<PrivateUser> =
  * @param { string } password the data received from body of POST request
  * @returns { PrivateUser }
  */
-export const loginUserServise = async ({ email, password }: LoginData): Promise<PrivateUser> => {
+export const loginUserServise = async ({
+  email,
+  password,
+}: LoginData): Promise<PrivateUser> => {
   try {
     const userData = new userModel({ email, password });
     await userData.validate(['email', 'password']);
@@ -82,7 +58,7 @@ export const loginUserServise = async ({ email, password }: LoginData): Promise<
     const match = await bcrypt.compare(password, res.password);
     if (!match) throw new Error('Wrong email or password');
 
-    return privateUserDataTransform(res);
+    return userDataTransformator({user: res, isPrivate: true});
   } catch (error) {
     throw new HttpErrors(error.status || 401, `Failed to login user`, error.message);
   }
