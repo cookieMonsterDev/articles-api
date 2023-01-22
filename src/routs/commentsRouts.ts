@@ -1,18 +1,18 @@
 import { Router } from 'express';
-import { createCommntControl, getCommntControl } from '../controls/commentsControl';
+import { createCommntControl, deleteCommntControl, getAllCommentsControl, getCommentControl, updateCommntControl, } from '../controls/commentsControl';
 import { isAuthorized } from '../middleware/authMiddleware';
 
 const commentsRouter = Router();
 
 commentsRouter
-  .route('/articles/:id/comments')
+  .route('/articles/:articleId/comments')
   .post(isAuthorized, createCommntControl)
-  // .get(getAllArticleControl)
-  // .put(isAuthorized, updateArticleControl)
-  // .delete(isAuthorized, deleteArticleControl);
+  .get(getAllCommentsControl)
 
 commentsRouter
   .route('/articles/:articleId/comments/:commentId')
-  .get(isAuthorized, getCommntControl)
+  .get(getCommentControl)
+  .put(isAuthorized, updateCommntControl)
+  .delete(isAuthorized, deleteCommntControl);
 
 export default commentsRouter;
