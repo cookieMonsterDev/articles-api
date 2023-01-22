@@ -4,6 +4,7 @@ declare global {
       DATA_BASE_LOCAL_URL: string;
       DATA_BASE_URL: string;
       SECRET_KEY: string;
+      CORS_URL: string;
     }
   }
 }
